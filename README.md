@@ -1,5 +1,5 @@
 # Recovery-sw---aws
-Configuration and Installation Manual of a Multicast Solution with AWS for Software Restoration in Computer Labs.
+Manual of a Multicast Solution with AWS for Software Restoration in Computer Labs.
 
 1. Materials:
 The high-performance hardware provides the necessary resources to achieve efficient performance and fast response of the multicast platform, therefore a workstation computer equipped with an Intel® Xeon® processor E-2224G, 8 (4P+4E) cores up to 4.7 GHz Chipset FCLGA1151, accompanied by 32GB of RAM 2666 MHz DDR4 and a 2TB SSD M.2 2280 PCIe Gen4x4 M.2 NVMe solid disk was used.
