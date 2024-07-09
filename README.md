@@ -104,12 +104,8 @@ That’s it. See, how easy it is to install Ubuntu. You can use this method to r
 Finished installation
 
 5. How to install ZabbiX for Ubuntu?
-This guide will assume you have a working Ubuntu Server already installed with SSH enabled and ready to go. If you need help with installing Ubuntu server, refer here
-If you’re more visual and prefer to watch an installation walk through, refer here
-Aside from that, lets jump straight into installing Zabbix 6.4 PRE-RELEASE on top of Ubuntu Server 22.04.1 which as  the time of this writing, is latest and greatest versions of both ->
-  5.1 Install ubuntu server 22.04.1 and enable ssh
-  5.2 SSH to your Ubuntu server to run install commands
-  5.3 Install and configure Zabbix for your platform
+
+5.1 Install and configure Zabbix for your platform
 
 Run the following cmds:
 
@@ -118,7 +114,7 @@ sudo dpkg -i zabbix-release_6.3-3+ubuntu22.04_all.deb
 sudo apt update 
 sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
 
-5.4 Install sql server
+5.2 Install sql server
 
 sudo apt-get install mysql-server
 sudo systemctl start mysql
@@ -152,6 +148,131 @@ sudo vim /etc/zabbix/zabbix_server.conf
 systemctl restart zabbix-server zabbix-agent apache2
 systemctl enable zabbix-server zabbix-agent apache2
 
-10. Open Zabbix UI web page and proceed with web ui config (should be self explanatory)
-
+5.10 Open Zabbix UI web page and proceed with web ui config (should be self explanatory)
 The default URL for Zabbix UI when using Apache web server is http://host/zabbix
+
+6 How to install zabbix for Ubuntu?
+
+#this guide is used for configure ZabbiX monitor of process in plataform linux.
+header: | this "open guide" is a collaborative effort. It was begun and is led by [CristhBrceP (https://github.com/CristhBrceP)].
+
+Install and configure ZabbiX for plataform Linux version 22.04 Jammy
+
+#open terminal
+#use commnand for install
+  wget https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_7.0-1+ubuntu22.04_all.deb
+  dpkg -i zabbix-release_7.0-1+ubuntu22.04_all.deb
+  apt update
+
+#use this command for install server, interfaz and agent ZabbiX
+  apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+
+#use this command for install Mysql server
+  sudo apt-get install mysql-server
+  sudo systemctl start mysql
+
+#use command for create initial database
+#define own password for mysql line 26
+  mysql -uroot -p
+  password
+  mysql> create database zabbix character set utf8mb4 collate utf8mb4_bin;
+  mysql> create user zabbix@localhost identified by 'password';                 
+  mysql> grant all privileges on zabbix.* to zabbix@localhost;
+  mysql> set global log_bin_trust_function_creators = 1;
+  mysql> quit;
+
+#On Zabbix server host import initial schema and data. You will be prompted to enter your newly created password.
+ sudo zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -p zabbix
+
+#use this command for Disable log_bin_trust_function_creators option after importing database schema.
+  mysql -uroot -p
+  password
+  mysql> set global log_bin_trust_function_creators = 0;
+  mysql> quit;
+
+#Configure the database for Zabbix server
+#Edit file /etc/zabbix/zabbix_server.conf and set the DB password with
+  sudo vim /etc/zabbix/zabbix_server.conf
+    DBPassword=password
+
+#Start Zabbix server and agent processes
+  systemctl restart zabbix-server zabbix-agent apache2
+  systemctl enable zabbix-server zabbix-agent apache2
+
+#Open Zabbix UI web page and proceed with web ui config
+#The default URL for Zabbix UI when using Apache web server is http://host/zabbix
+#this guide is used for configure DRBL server of process in plataform linux.
+header: |
+  this "open guide" is a collaborative effort. It was begun and is led by [CristhBrceP (https://github.com/CristhBrceP)].
+
+How to install DRBL on Linux?
+
+Install and configure DRBL server for plataform Linux version 22.04 Jammy
+
+#Prepare ubuntu
+#open terminal
+#use commnand for install DRBL server. Open the sources.list file to add the Clonezilla repository with this command:
+  sudo nano /etc/apt/sources.list
+
+#Add this line to the end of the file
+  deb http://drbl.sourceforge.net/drbl-core drbl stable
+
+#donwload GPG Key for unbuntu version Jammy
+  deb http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse # (Or any Ubuntu mirror site near you)
+  deb http://free.nchc.org.tw/drbl-core drbl stable
+
+#Make sure the system is up to date:
+  sudo apt-get update
+
+#Configure network (optional)
+  sudo apt-get remove network-manager
+
+#Edit the interfaces file
+  sudo nano /etc/network/interfaces
+
+  #Loopback
+  auto lo
+  iface lo inet loopback
+  #Network interface, must match your network
+  auto eth0
+  iface eth0 inet static
+  address 192.168.1.53
+  netmask 255.255.255.0
+  gateway 192.168.1.1
+  #Virtual Interface for Conezilla, make sure it is “class C” IP (192.168.x.x)
+  auto eth0:0
+  iface eth0:0 inet static
+  address 192.168.100.100
+  netmask 255.255.255.0
+
+#use command for install DRBL
+sudo /usr/sbin/drblsrv -i
+
+#It asks us if we want to set a password for each time we clone a client, we say “N”.
+
+#Do you want to set the pxelinux password for the clients so that when the client boots, a password must be entered to boot.
+client boots, a password must be entered to boot (For more security)
+[y/N] N
+
+#I recommend choosing “Y” in the following question:
+Do you want to use a graphical background for the PXE menu when the client boots?
+Note.
+
+#If you use the PXELinux graphical menu, but the client does not boot, you can switch to text mode by running
+you can switch to text mode by running “/opt/drbl/sbin/switch-pxe-bg-mode -m text".
+[y/N] Y
+
+#Choose “N” at the next prompt:
+#Do you want to use the DRBL server as a NAT server? If not, your DRBL client will not be able to access the Internet.
+[y/N] Y
+
+#Finally choose “Y”:
+#We are now ready to deploy the files on the system!
+#Attention! If you continue, your firewall rules will be overwritten during the installation...
+[Y/N] Y
+
+#Start Clonezilla Server
+Now that we have finished configuring Clonezilla let's start it to begin cloning. Type this command:
+  sudo /usr/sbin/dcs
+
+#On the first screen choose “Select all the clients”.
