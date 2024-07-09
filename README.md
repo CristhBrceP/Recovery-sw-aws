@@ -5,10 +5,12 @@ Configuration and Installation Manual of a Multicast Solution with AWS for Softw
 The high-performance hardware provides the necessary resources to achieve efficient performance and fast response of the multicast platform, therefore a workstation computer equipped with an Intel® Xeon® processor E-2224G, 8 (4P+4E) cores up to 4.7 GHz Chipset FCLGA1151, accompanied by 32GB of RAM 2666 MHz DDR4 and a 2TB SSD M.2 2280 PCIe Gen4x4 M.2 NVMe solid disk was used.
 
 2. Operating Platform:
+   
 Linux Ubuntu versión22.04.4 LTS (Jammy Jellyfish)
 Download link: https://releases.ubuntu.com/jammy/
 
-3. Minimum requirements:
+4. Minimum requirements:
+   
 * Processor: Intel or AMD at 1 Ghz
 * RAM: 384 MB
 * Hard disk: 5 GB
@@ -28,6 +30,7 @@ Step 2: Once you select it, you will be prompted to proceed with “Try Ubuntu�
 Try or Install Ubuntu
 
 Step 3: Alternatively, you can click the installation icon on the desktop to initiate the installation if you dismiss the above window.
+
 ![image](https://github.com/CristhBrceP/Recovery-sw-aws/assets/171496937/fe9a149f-3235-49ef-81f6-bc722286d4c4)
 
 Start the Installer in Live Environment
@@ -56,6 +59,7 @@ Erase Disk and Install Ubuntu
 
 Step 7: When you hit the “Install Now” button, you’ll see a warning that you are about to delete the data. You already know it, don’t you?
 ![image](https://github.com/CristhBrceP/Recovery-sw-aws/assets/171496937/72af27f4-cf3a-43a2-8a89-ba04e31470b9)
+
 Usual warning about formatting the disk
 
 Step 8: Things are straightforward from here. You’ll be asked to choose a time zone.
